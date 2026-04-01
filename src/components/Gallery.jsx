@@ -1,141 +1,48 @@
 import React, { useState, forwardRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Maximize2, X } from 'lucide-react'
 
-const GalleryItem = motion(forwardRef(({ image, title, category, description, index, onClick, ...props }, ref) => {
-  const contentVariants = {
-    initial: { y: 20, opacity: 0 },
-    hover: { y: 0, opacity: 1 }
-  }
-
+const GalleryItem = motion(forwardRef(({ image, title, category, description, index, ...props }, ref) => {
   return (
     <div
       ref={ref}
       {...props}
-      onClick={onClick}
-      className="group relative aspect-[4/5] overflow-hidden rounded-3xl bg-sun-green/10 cursor-pointer"
+      className={`w-full bg-sun-cream rounded-[2.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col md:flex-row ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
     >
-      <img
-        src={image}
-        alt={title}
-        loading="lazy"
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-      />
-      
-      {/* Mobile Hint - Visible only on mobile */}
-      <div 
-        className="absolute bottom-4 right-4 md:hidden bg-sun-orange text-white p-3 rounded-full shadow-lg z-10"
-        aria-label="View details"
-      >
-        <Maximize2 className="w-5 h-5" />
+      <div className="w-full md:w-1/2 min-h-[300px] md:min-h-[500px] overflow-hidden group">
+        <img
+          src={image}
+          alt={title}
+          loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
       </div>
 
-      <motion.div 
-        initial="initial"
-        whileHover="hover"
-        className="absolute inset-0 bg-gradient-to-t from-sun-green/95 via-sun-green/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8"
-      >
-        <motion.span
-          variants={contentVariants}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="text-sun-orange font-sans text-xs font-bold uppercase tracking-widest mb-2"
-        >
+      <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center relative">
+        <span className="text-sun-orange font-sans text-xs md:text-sm font-bold uppercase tracking-widest mb-4 inline-block">
           {category}
-        </motion.span>
-        <motion.h3
-          variants={contentVariants}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="text-white font-serif text-2xl font-bold mb-3"
-        >
+        </span>
+        <h2 className="text-sun-green font-serif text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
           {title}
-        </motion.h3>
-        <motion.p
-          variants={contentVariants}
-          transition={{ duration: 0.4, delay: 0.3 }}
-          className="text-white/80 font-sans text-sm mb-6 line-clamp-4 leading-relaxed"
-        >
+        </h2>
+        <p className="text-sun-green/70 font-sans text-base md:text-xl leading-relaxed mb-8 md:mb-12">
           {description}
-        </motion.p>
-        <motion.div
-          variants={contentVariants}
-          transition={{ duration: 0.4, delay: 0.4 }}
-        >
-          <div 
-            className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20 hover:bg-sun-orange hover:border-sun-orange transition-all"
-            aria-label={`View details of ${title}`}
+        </p>
+        <div className="mt-auto pt-6 md:pt-8 border-t border-sun-green/10">
+          <button 
+            className="px-8 py-3 bg-sun-green text-white rounded-full font-sans text-xs sm:text-sm font-bold uppercase tracking-widest hover:bg-sun-orange transition-all duration-300 shadow-xl shadow-sun-green/20 w-fit"
           >
-            <Maximize2 className="w-5 h-5" />
-          </div>
-        </motion.div>
-      </motion.div>
+            View Details
+          </button>
+        </div>
+      </div>
     </div>
   )
 }))
 
-const GalleryModal = ({ item, onClose }) => {
-  if (!item) return null
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8"
-    >
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
-        className="absolute inset-0 bg-sun-charcoal/80 backdrop-blur-xl"
-      />
-      
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.9, opacity: 0, y: 20 }}
-        className="relative w-full max-w-5xl bg-sun-cream rounded-3xl overflow-hidden shadow-2xl grid md:grid-cols-2"
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-sun-charcoal/10 backdrop-blur-md flex items-center justify-center text-sun-charcoal hover:bg-sun-orange hover:text-white transition-all"
-        >
-          <X className="w-6 h-6" />
-        </button>
-
-        <div className="aspect-[4/5] md:aspect-auto h-[300px] md:h-full">
-          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-        </div>
-
-        <div className="p-8 md:p-12 flex flex-col justify-center">
-          <span className="text-sun-orange font-sans text-xs md:text-sm font-bold uppercase tracking-widest mb-4 inline-block">
-            {item.category}
-          </span>
-          <h2 className="text-sun-green font-serif text-3xl md:text-5xl font-bold mb-6 leading-tight">
-            {item.title}
-          </h2>
-          <p className="text-sun-green/70 font-sans text-base md:text-lg leading-relaxed mb-8">
-            {item.description}
-          </p>
-          <div className="mt-auto pt-8 border-t border-sun-green/10">
-            <button 
-              onClick={onClose}
-              className="px-8 py-4 bg-sun-green text-white rounded-full font-sans text-sm font-bold uppercase tracking-widest hover:bg-sun-orange transition-all duration-300 shadow-lg shadow-sun-green/20"
-            >
-              Close Details
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-}
-
 const Gallery = () => {
   const [activeFilter, setActiveFilter] = useState('All')
-  const [selectedItem, setSelectedItem] = useState(null)
   
-  const filters = ['All', 'Events', 'Education', 'Cleanliness', 'Community']
+  const filters = ['All', 'Events', 'Education', 'Cleanliness']
   
   const items = [
     { 
@@ -161,14 +68,14 @@ const Gallery = () => {
   const filteredItems = activeFilter === 'All' ? items : items.filter(i => i.category === activeFilter)
 
   return (
-    <section id="gallery" className="py-24 md:py-48 bg-sun-cream overflow-hidden">
+    <section id="gallery" className="py-24 md:py-40 bg-sun-cream overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16 md:mb-24">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-sun-green font-serif text-5xl md:text-8xl font-bold mb-8 leading-tight"
+            className="text-sun-green font-serif text-5xl md:text-8xl font-bold mb-6 leading-tight"
           >
             Moments <span className="text-sun-orange italic">That Matter</span>.
           </motion.h2>
@@ -177,18 +84,18 @@ const Gallery = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-sun-green/60 font-sans text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed mb-12 md:mb-16"
+            className="text-sun-green/60 font-sans text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed mb-12"
           >
             A visual journey through our impacts, from the heart of our cities to the soul of our villages.
           </motion.p>
           
           {/* Filters */}
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-8 md:mt-12">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-8">
             {filters.map((filter) => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-4 sm:px-8 py-2 md:py-2.5 rounded-full font-sans text-[10px] sm:text-sm font-bold uppercase tracking-widest transition-all duration-300 ${
+                className={`px-6 sm:px-8 py-2 md:py-2.5 rounded-full font-sans text-[10px] sm:text-sm font-bold uppercase tracking-widest transition-all duration-300 ${
                   activeFilter === filter
                     ? 'bg-sun-orange text-white shadow-lg shadow-sun-orange/30'
                     : 'glass-light text-sun-green/60 hover:text-sun-green border border-sun-green/10'
@@ -202,7 +109,7 @@ const Gallery = () => {
 
         <motion.div
           layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+          className="flex flex-col gap-12 md:gap-20"
         >
           <AnimatePresence mode='popLayout'>
             {filteredItems.map((item, index) => (
@@ -210,25 +117,16 @@ const Gallery = () => {
                 key={item.title} 
                 {...item} 
                 index={index}
-                onClick={() => setSelectedItem(item)}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.5 }}
                 layout
               />
             ))}
           </AnimatePresence>
         </motion.div>
-
-        <AnimatePresence>
-          {selectedItem && (
-            <GalleryModal 
-              item={selectedItem} 
-              onClose={() => setSelectedItem(null)} 
-            />
-          )}
-        </AnimatePresence>
       </div>
     </section>
   )
