@@ -45,6 +45,7 @@ const Navbar = () => {
                   contactSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
+              aria-label="Join our movement"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="hidden md:block bg-sun-orange text-white px-8 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest shadow-lg shadow-sun-orange/20"
@@ -55,6 +56,7 @@ const Navbar = () => {
             {/* Mobile Toggle */}
             <button 
               onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
               className="md:hidden w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:text-sun-orange transition-all active:scale-90"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

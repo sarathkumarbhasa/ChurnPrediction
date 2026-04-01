@@ -1,10 +1,45 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { Instagram, Linkedin, Twitter, Youtube, ArrowUp } from 'lucide-react'
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Instagram, Linkedin, Twitter, Youtube, ArrowUp, Check } from 'lucide-react'
 
 const Footer = () => {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState('idle') // idle, loading, success, error
+  const [message, setMessage] = useState('')
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault()
+    if (!email) return
+
+    setStatus('loading')
+    try {
+      const response = await fetch('http://localhost:5000/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setStatus('success')
+        setMessage('Thank you for subscribing!')
+        setEmail('')
+        setTimeout(() => setStatus('idle'), 5000)
+      } else {
+        setStatus('error')
+        setMessage(data.message || 'Subscription failed')
+        setTimeout(() => setStatus('idle'), 3000)
+      }
+    } catch (error) {
+      setStatus('error')
+      setMessage('Server error. Please try again later.')
+      setTimeout(() => setStatus('idle'), 3000)
+    }
   }
 
   return (
@@ -64,16 +99,39 @@ const Footer = () => {
           <div>
             <h4 className="font-sans font-bold text-white text-base md:text-lg mb-6 md:mb-8 uppercase tracking-[0.2em]">Newsletter</h4>
             <p className="text-white/40 font-sans text-sm md:text-base mb-6">Stay updated with our latest impacts.</p>
-            <div className="relative">
+            <form onSubmit={handleSubscribe} className="relative">
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email"
+                disabled={status === 'loading' || status === 'success'}
                 className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-3 md:py-4 text-white outline-none focus:border-sun-orange transition-colors font-sans text-sm"
               />
-              <button className="absolute right-1.5 top-1.5 bottom-1.5 bg-sun-orange text-white px-4 md:px-6 rounded-full font-sans font-bold text-xs md:text-sm">
-                Join
+              <button 
+                type="submit"
+                disabled={status === 'loading' || status === 'success'}
+                className="absolute right-1.5 top-1.5 bottom-1.5 bg-sun-orange text-white px-4 md:px-6 rounded-full font-sans font-bold text-xs md:text-sm flex items-center justify-center min-w-[80px]"
+              >
+                {status === 'loading' ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : status === 'success' ? (
+                  <Check className="w-4 h-4" />
+                ) : 'Join'}
               </button>
-            </div>
+            </form>
+            <AnimatePresence>
+              {(status === 'success' || status === 'error') && (
+                <motion.p
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className={`mt-4 text-xs font-sans ${status === 'success' ? 'text-sun-orange' : 'text-red-400'}`}
+                >
+                  {message}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
         </div>
