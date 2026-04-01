@@ -81,7 +81,7 @@ const Navbar = () => {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="h-full flex flex-col items-center justify-center px-6 pt-24 pb-12"
             >
-              <div className="w-full max-w-sm space-y-8 text-center">
+              <div className="w-full max-w-sm space-y-4 text-center">
                 {navLinks.map((item, index) => (
                   <motion.div
                     key={item}
@@ -92,12 +92,15 @@ const Navbar = () => {
                     <a 
                       href={`#${item.toLowerCase()}`}
                       onClick={() => setIsOpen(false)}
-                      className="group block py-2"
+                      className="group block py-3 relative"
                     >
-                      <span className="font-serif text-5xl font-bold text-white group-hover:text-sun-orange transition-colors">
+                      <span className="absolute -left-2 top-0 text-[10px] font-sans font-bold text-sun-orange opacity-0 group-hover:opacity-100 transition-opacity">
+                        0{index + 1}
+                      </span>
+                      <span className="font-serif text-6xl font-bold text-white group-hover:text-sun-orange transition-all duration-300 block transform group-hover:italic group-hover:translate-x-2">
                         {item}
                       </span>
-                      <div className="h-0.5 w-0 bg-sun-orange mx-auto group-hover:w-12 transition-all duration-300" />
+                      <div className="h-[1px] w-0 bg-sun-orange/30 mx-auto group-hover:w-full transition-all duration-500 mt-2" />
                     </a>
                   </motion.div>
                 ))}
