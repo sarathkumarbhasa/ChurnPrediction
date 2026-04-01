@@ -17,7 +17,7 @@ const Footer = () => {
 
     setStatus('loading')
     try {
-      const response = await fetch('http://localhost:5000/api/newsletter', {
+      const response = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
