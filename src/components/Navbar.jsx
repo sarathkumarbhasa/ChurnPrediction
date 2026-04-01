@@ -72,35 +72,43 @@ const Navbar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[49] bg-sun-charcoal/60 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-[60] bg-sun-green md:hidden flex flex-col"
           >
+            {/* Header in Overlay */}
+            <div className="p-6 flex items-center justify-between border-b border-white/5">
+              <span className="text-2xl font-serif font-bold text-white tracking-tighter">
+                S<span className="text-sun-orange">U</span>N
+              </span>
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="h-full flex flex-col items-center justify-center px-6 pt-24 pb-12"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="flex-1 flex flex-col items-center justify-center px-6 overflow-y-auto"
             >
-              <div className="w-full max-w-sm space-y-4 text-center">
+              <div className="w-full max-w-sm space-y-2 text-center py-12">
                 {navLinks.map((item, index) => (
                   <motion.div
                     key={item}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ delay: index * 0.05 }}
                   >
                     <a 
                       href={`#${item.toLowerCase()}`}
                       onClick={() => setIsOpen(false)}
-                      className="group block py-3 relative"
+                      className="group block py-4"
                     >
-                      <span className="absolute -left-2 top-0 text-[10px] font-sans font-bold text-sun-orange opacity-0 group-hover:opacity-100 transition-opacity">
-                        0{index + 1}
-                      </span>
-                      <span className="font-serif text-6xl font-bold text-white group-hover:text-sun-orange transition-all duration-300 block transform group-hover:italic group-hover:translate-x-2">
+                      <span className="font-serif text-5xl font-bold text-white group-hover:text-sun-orange transition-all duration-300 block transform group-hover:italic group-hover:translate-x-2">
                         {item}
                       </span>
-                      <div className="h-[1px] w-0 bg-sun-orange/30 mx-auto group-hover:w-full transition-all duration-500 mt-2" />
                     </a>
                   </motion.div>
                 ))}
@@ -108,8 +116,8 @@ const Navbar = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: navLinks.length * 0.1 + 0.1 }}
-                  className="pt-10"
+                  transition={{ delay: navLinks.length * 0.05 + 0.1 }}
+                  className="pt-12"
                 >
                   <button
                     onClick={() => {
@@ -123,8 +131,8 @@ const Navbar = () => {
                   >
                     Join the movement
                   </button>
-                  <p className="mt-8 text-white/40 font-sans text-sm tracking-[0.3em] uppercase">
-                    Made for Bharat
+                  <p className="mt-12 text-white/30 font-sans text-[10px] tracking-[0.4em] uppercase">
+                    Student Union for Nation
                   </p>
                 </motion.div>
               </div>
