@@ -156,42 +156,6 @@ const Gallery = () => {
       category: 'Cleanliness',
       description: 'Our weekend warrior team successfully removed 2 tons of waste from the banks of the Yamuna river.'
     },
-    { 
-      image: 'https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?q=80&w=800', 
-      title: 'Urban Food Distribution', 
-      category: 'Community',
-      description: 'Ensuring no one goes hungry. Our daily distribution drive serves over 200 meals to the needy in Delhi.'
-    },
-    { 
-      image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800', 
-      title: 'School Building Initiative', 
-      category: 'Education',
-      description: 'Laying the bricks for a better tomorrow. We helped reconstruct two primary schools in rural Bihar.'
-    },
-    { 
-      image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800', 
-      title: 'Student Leadership Camp', 
-      category: 'Events',
-      description: 'A 3-day intensive workshop focused on developing soft skills and national pride among university students.'
-    },
-    { 
-      image: 'https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?q=80&w=800', 
-      title: 'Tech for Good Hackathon', 
-      category: 'Community',
-      description: 'Students coding solutions for local municipal problems, from waste tracking to traffic management.'
-    },
-    { 
-      image: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=800', 
-      title: 'Mental Health Awareness', 
-      category: 'Events',
-      description: 'Breaking the stigma. Workshops held across 10 universities to support student mental wellness.'
-    },
-    { 
-      image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=800', 
-      title: 'Green Campus Drive', 
-      category: 'Cleanliness',
-      description: 'Planting over 5000 saplings across college campuses to create sustainable green lungs in our cities.'
-    },
   ]
 
   const filteredItems = activeFilter === 'All' ? items : items.filter(i => i.category === activeFilter)

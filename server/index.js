@@ -2,7 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config();
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const compression = require('compression');
+const morgan = require('morgan');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const Volunteer = require('./models/Volunteer');
 const Newsletter = require('./models/Newsletter');
@@ -10,9 +14,20 @@ const Newsletter = require('./models/Newsletter');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Security & Production Middlewares
+app.use(helmet({ contentSecurityPolicy: false })); // Disabled CSP to allow external images
+app.use(compression());
+app.use(morgan('combined'));
 app.use(cors());
 app.use(express.json());
+
+// API Rate Limiting
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: { message: 'Too many requests, please try again later.' }
+});
+app.use('/api/', apiLimiter);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));
@@ -77,12 +92,22 @@ app.get('/health', (req, res) => {
     res.json({ status: 'Server is running' });
 });
 
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error('Unhandled Error:', err);
+    res.status(500).json({ message: 'An unexpected error occurred.' });
+});
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+    });
+}
+
+module.exports = app;
